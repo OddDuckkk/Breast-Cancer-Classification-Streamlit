@@ -13,12 +13,12 @@ from sklearn.metrics import (
     ConfusionMatrixDisplay
 )
 
-from GNB import GaussianNaiveBayes
-from RF import ManualRandomForest
+from model.GaussianNaiveBayes import GaussianNaiveBayes
+from model.RandomForest import ManualRandomForest
 
-from validation import validate_dataset, validate_data_klasifikasi, REQUIRED_COLUMNS, FITUR
-from preprocessingGNB import preprocess_gnb
-from preprocessingRF import preprocess_rf
+from preprocessing.validation import validate_dataset, validate_data_klasifikasi, REQUIRED_COLUMNS, FITUR
+from preprocessing.preprocessingGNB import preprocess_gnb
+from preprocessing.preprocessingRF import preprocess_rf
 
 # =========================
 # SIDEBAR MENU
@@ -492,10 +492,8 @@ elif page == "Klasifikasi":
                 model = st.session_state["rf_model"]
                 st.info("⚙️ Preprocessing Random Forest")
 
-                
                 scaler = st.session_state["rf_scaler"]
                 label_encoder = st.session_state["rf_label_encoder"]
-                st.info("⚙️ Preprocessing untuk Random Forest")
 
                 X_input = (
                     df
@@ -509,7 +507,7 @@ elif page == "Klasifikasi":
                 y_pred = label_encoder.inverse_transform(y_pred_encoded)
 
             # ===== SIMPAN HASIL =====
-            df_result = df.copy()
+            df_result = X_input.copy()
             df_result["Hasil Prediksi"] = y_pred
 
             st.session_state["hasil_klasifikasi"] = df_result
