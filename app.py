@@ -263,7 +263,7 @@ elif page == "Training":
                     X_rf = st.session_state["X_rf"]
                     y_rf = st.session_state["y_rf"]
 
-                    skf = StratifiedKFold(n_splits=10, shuffle=True, random_state=42)
+                    skf = StratifiedKFold(n_splits=10, shuffle=True, random_state=0)
 
                     acc_scores, recall_scores = [], []
                     cms = []
@@ -273,9 +273,11 @@ elif page == "Training":
                         y_train, y_test = y_rf[train_idx], y_rf[test_idx]
 
                         model_rf = ManualRandomForest(
-                            n_estimators=10,
-                            max_depth=5,
-                            max_features='sqrt'
+                            n_estimators=50,
+                            max_depth=10,
+                            min_samples_split=2,
+                            max_features='sqrt',
+                            random_state=42
                         )
 
                         model_rf.fit(X_train, y_train)

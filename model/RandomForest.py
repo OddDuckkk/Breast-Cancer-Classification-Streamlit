@@ -5,11 +5,11 @@ from collections import Counter
 class Node:
     """Representasi satu simpul (node) dalam pohon keputusan."""
     def __init__(self, feature=None, threshold=None, left=None, right=None, *, value=None):
-        self.feature = feature      # Indeks fitur yang dipakai untuk split (misal: fitur ke-2)
-        self.threshold = threshold  # Nilai ambang batas (misal: <= 15.5)
-        self.left = left            # Cabang kiri (True)
-        self.right = right          # Cabang kanan (False)
-        self.value = value          # Nilai prediksi (Hanya ada di Leaf Node)
+        self.feature = feature      
+        self.threshold = threshold  
+        self.left = left            
+        self.right = right        
+        self.value = value         
 
     def is_leaf_node(self):
         return self.value is not None
@@ -34,7 +34,9 @@ class ManualDecisionTree:
         self.root = self._grow_tree(X, y)
 
     def _grow_tree(self, X, y, depth=0):
+        #variabel input
         n_samples, n_feats = X.shape
+        #variabel target
         n_labels = len(np.unique(y))
 
         # 1. Cek Kriteria Berhenti (Stop Conditions)
@@ -126,7 +128,7 @@ class ManualDecisionTree:
         if x[node.feature] <= node.threshold:
             return self._traverse_tree(x, node.left)
         return self._traverse_tree(x, node.right)
-    
+      
 class ManualRandomForest:
     """
     Random Forest from scratch.
@@ -134,12 +136,13 @@ class ManualRandomForest:
     - Menggunakan Random Feature Selection.
     - Menggunakan Majority Voting.
     """
-    def __init__(self, n_estimators=10, max_depth=10, min_samples_split=2, max_features='sqrt'):
+    def __init__(self, n_estimators=10, max_depth=10, min_samples_split=2, max_features='sqrt', random_state=None):
         self.n_estimators = n_estimators
         self.max_depth = max_depth
         self.min_samples_split = min_samples_split
         self.max_features = max_features
         self.trees = []
+        self.random_state = random_state
 
     def _to_numpy(self, X):
         if isinstance(X, (pd.DataFrame, pd.Series)):
@@ -148,6 +151,10 @@ class ManualRandomForest:
 
     # --- TAHAP TRAINING ---
     def fit(self, X, y):
+        # 2. PASANG GEMBOK DI SINI
+        if self.random_state is not None:
+            np.random.seed(self.random_state)
+            
         X = self._to_numpy(X)
         y = self._to_numpy(y)
         self.trees = []
@@ -178,7 +185,7 @@ class ManualRandomForest:
 
         return self
 
-# --- TAHAP TESTING ---
+    # --- TAHAP TESTING ---
     def predict(self, X):
         X = self._to_numpy(X)
 
