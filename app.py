@@ -222,9 +222,9 @@ elif page == "Training":
             if st.button("🚀 Mulai Training"):
                 try:
                     #TRAINING GNB
-                    model = GaussianNaiveBayes()
+                    model = GaussianNaiveBayes(var_smoothing=0.001)
 
-                    skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+                    skf = StratifiedKFold(n_splits=10, shuffle=True, random_state=42)
 
                     accuracies, precisions, recalls, f1s = [], [], [], []
                     y_true_all, y_pred_all = [], []
